@@ -13,8 +13,7 @@ dist-ssr
 *.local
 package-lock.json
 assets
-# Build-версия проекта
-build
+
 
 # Системные файлы vscode
 !.vscode/extensions.json
