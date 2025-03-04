@@ -1,0 +1,14 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  outline: 0;
+}
+
+:root {
+  --accent-default: #f18805;
+
+  --text-default: 700 95px 'Times new Roman', sans-serif;
+}

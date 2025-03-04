@@ -1,0 +1,31 @@
+# Различные логи, если они будут
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Файлы ноды
+node_modules
+node_modules/*
+dist
+dist-ssr
+*.local
+package-lock.json
+assets
+# Build-версия проекта
+build
+
+# Системные файлы vscode
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+.database
+.database/*

@@ -1,0 +1,11 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "no-empty-source": true,
+    "block-no-empty": true,
+    "font-family-no-duplicate-names": true,
+    "declaration-block-no-duplicate-properties": true,
+    "color-no-invalid-hex": true,
+    "color-hex-length": "long"
+  }
+}
