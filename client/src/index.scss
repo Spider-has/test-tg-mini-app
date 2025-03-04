@@ -1,14 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 *,
 *::after,
 *::before {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  outline: 0;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    outline: 0;
 }
 
 :root {
-  --accent-default: #f18805;
+    --accent-default: #f18805;
+    --input-border: #838383;
 
-  --text-default: 700 95px 'Times new Roman', sans-serif;
+    --text-default: 400 14px 'Raleway', sans-serif;
+    --text-input: 400 12px 'Raleway', sans-serif;
+    --text-title: 500 16px 'Raleway', sans-serif;
+    --button-text: 400 16px 'Raleway', sans-serif;
 }
