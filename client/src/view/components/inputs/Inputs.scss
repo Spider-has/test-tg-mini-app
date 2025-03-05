@@ -1,0 +1,16 @@
+.input {
+    width: 100%;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 8px 0 8px 15px;
+    &::placeholder {
+        color: var(--input-border);
+    }
+    &_multi-line {
+        min-height: 60px;
+    }
+    resize: none;
+    height: auto;
+    overflow-y: hidden;
+}

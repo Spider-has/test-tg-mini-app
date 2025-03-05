@@ -1,62 +1,62 @@
 {
     "scripts": {
-      "lint": "npm run styles || npm run eslinter || npm run prettierlint",
-      "styles": "npx stylelint --fix **/*.css",
-      "eslinter": "npx eslint --fix .",
-      "prettierlint": "npx prettier . --write",
-      "start": "react-scripts start",
-      "build": "react-scripts build && npm run lint",
-      "test": "react-scripts test",
-      "eject": "react-scripts eject"
+        "lint": "npm run styles || npm run eslinter || npm run prettierlint",
+        "styles": "npx stylelint --fix **/*.css",
+        "eslinter": "npx eslint --fix .",
+        "prettierlint": "npx prettier . --write",
+        "start": "react-scripts start",
+        "build": "react-scripts build && npm run lint",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
     },
     "dependencies": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0",
-      "react-router-dom": "^6.14.2"
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.14.2"
     },
     "devDependencies": {
-      "@types/react": "^18.2.17",
-      "@types/react-dom": "^18.2.7",
-      "@testing-library/react": "^13.4.0",
-      "@testing-library/user-event": "^13.5.0",
-      "@types/css-modules": "^1.0.5",
-      "@types/node": "^16.18.59",
-      "@types/react-color": "^3.0.11",
-      "@typescript-eslint/eslint-plugin": "^5.0.0",
-      "@typescript-eslint/parser": "^5.0.0",
-      "eslint": "^8.50.0",
-      "eslint-config-prettier": "^9.0.0",
-      "eslint-plugin-prettier": "^5.0.1",
-      "eslint-plugin-react": "^7.33.2",
-      "prettier": "3.0.3",
-      "react": "^18.2.0",
-      "react-color": "^2.19.3",
-      "react-dom": "^18.2.0",
-      "react-scripts": "5.0.1",
-      "rgb-hex": "^4.1.0",
-      "stylelint": "^15.11.0",
-      "stylelint-config-standard": "^34.0.0",
-      "typescript": "^4.9.5",
-      "typescript-plugin-css-modules": "^5.0.2"
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/css-modules": "^1.0.5",
+        "@types/node": "^16.18.59",
+        "@types/react": "^18.2.17",
+        "@types/react-color": "^3.0.11",
+        "@types/react-dom": "^18.2.7",
+        "@typescript-eslint/eslint-plugin": "^5.0.0",
+        "@typescript-eslint/parser": "^5.0.0",
+        "color-calendar": "^1.0.7",
+        "eslint": "^8.50.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.1",
+        "eslint-plugin-react": "^7.33.2",
+        "prettier": "3.0.3",
+        "react": "^18.2.0",
+        "react-color": "^2.19.3",
+        "react-dom": "^18.2.0",
+        "react-scripts": "5.0.1",
+        "rgb-hex": "^4.1.0",
+        "stylelint": "^15.11.0",
+        "stylelint-config-standard": "^34.0.0",
+        "typescript": "^4.9.5",
+        "typescript-plugin-css-modules": "^5.0.2"
     },
     "version": "0.1.0",
     "private": true,
     "eslintConfig": {
-      "extends": [
-        "react-app"
-      ]
+        "extends": [
+            "react-app"
+        ]
     },
     "browserslist": {
-      "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
-      ],
-      "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-      ]
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     }
-  }
-  
+}

@@ -1,16 +1,24 @@
 .request-creation {
+    height: 100vh;
+    min-height: 568px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    padding: 0 20px;
     justify-content: space-between;
     &__input-area {
         display: flex;
         flex-direction: column;
-        padding-top: 30px;
+        padding: 0 20px;
+        overflow-y: scroll;
+        height: auto;
     }
     &__title {
         width: 100%;
+        position: sticky;
+        top: 0px;
+        padding: 60px 0 5px 0;
+        background-color: #ffffff;
+        z-index: 10;
         & h1 {
             font: var(--text-title);
         }
@@ -34,6 +42,7 @@
         margin-top: 35px;
         font: var(--text-input);
     }
+
     &__task-description-area {
         display: flex;
         gap: 5px;
@@ -41,26 +50,74 @@
         margin-top: 30px;
         font: var(--text-input);
     }
+
     &__pages-navigation-area {
+        padding: 20px 20px 40px 20px;
+    }
+    &__date-select-area {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+        gap: 20px;
+    }
+    &__calendar-area {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        font: var(--text-input);
+        letter-spacing: 0.04em;
+    }
+    &__calendar-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__time-select-area {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        font: var(--text-input);
+        letter-spacing: 0.04em;
+    }
+    &__place-select-area {
+        display: flex;
+        flex-direction: column;
+        font: var(--text-input);
+    }
+    &__place-select-buttons {
         width: 100%;
-        justify-content: space-between;
-        padding-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 50%;
+        & div {
+            width: 100%;
+        }
     }
 }
 
-.input {
-    width: 100%;
-    border: 1px solid var(--input-border);
-    border-radius: 5px;
-    box-sizing: border-box;
-    padding: 8px 0 8px 15px;
-    &::placeholder {
-        color: var(--input-border);
+.navigation-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.options-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font: var(--text-default);
+}
+
+.checkbox-input {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    & input {
+        width: 16px;
+        height: 16px;
+        border-radius: 5px;
+        border: 1px solid #222222;
+        box-sizing: border-box;
     }
-    &_multi-line {
-        height: 60px;
-    }
-    resize: none;
 }

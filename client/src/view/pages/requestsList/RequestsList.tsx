@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { Button } from '../../components/button/Button';
+import { LinkedButton } from '../../components/button/Button';
 import './RequestsList.scss';
 
 export const RequestsList = () => {
@@ -16,9 +15,9 @@ export const RequestsList = () => {
                 </div>
             </div>
             <div className={'requests-list__button-area'}>
-                <Link to={'/requestCreation'}>
-                    <Button onClick={() => 0} text={'Добавить заявку'} />
-                </Link>
+                <div>
+                    <LinkedButton text={'Добавить заявку'} linkTo={'/requestCreation'} />
+                </div>
             </div>
         </div>
     );
