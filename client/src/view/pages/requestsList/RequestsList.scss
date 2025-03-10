@@ -34,4 +34,11 @@
         gap: 10px;
         font: var(--text-default);
     }
+    &__user-avatar-area {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        margin: 16px 20px 0 0;
+    }
 }

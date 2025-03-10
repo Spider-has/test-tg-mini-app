@@ -1,9 +1,13 @@
+import { Avatar } from '../../components/avatar/Avatar';
 import { LinkedButton } from '../../components/button/Button';
 import './RequestsList.scss';
 
 export const RequestsList = () => {
     return (
         <div className={'requests-list'}>
+            <div className={'requests-list__user-avatar-area'}>
+                <Avatar link="" path="" altText="" />
+            </div>
             <div className={'requests-list__logo-area'}>
                 <div className={'requests-list__logo'}>{/* <img src="" alt="лого" /> */}</div>
                 <div className={'requests-list__text-area'}>

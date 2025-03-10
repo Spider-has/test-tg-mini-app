@@ -1,11 +1,25 @@
 import { Button } from '../../components/button/Button';
-import { AddImageIcon } from '../../static/icons/icons';
+import { AddImageIcon, ChangeThemeIcon } from '../../static/icons/icons';
 import './RequestCreation.scss';
 import { OptionsList, OptionsProps, TextAreaInput, TextInput } from '../../components/inputs/Inputs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Calendar from 'color-calendar';
 import 'color-calendar/dist/css/theme-glass.css';
 import { useNavigate } from 'react-router-dom';
+import { Avatar } from '../../components/avatar/Avatar';
+import type { LngLat, SearchResponse, YMapLocationRequest } from 'ymaps3';
+import '@yandex/ymaps3-default-ui-theme';
+
+import {
+    YMap,
+    YMapControls,
+    YMapDefaultFeaturesLayer,
+    YMapDefaultMarker,
+    YMapDefaultSchemeLayer,
+    YMapGeolocationControl,
+    YMapSearchControl,
+} from '../../../lib/ymaps';
+import { YMapDefaultMarkerProps } from '@yandex/ymaps3-default-ui-theme';
 
 const TaskDescription = () => {
     return (
@@ -14,6 +28,7 @@ const TaskDescription = () => {
                 <span>Добавь 1-3 фотографии своей задачи</span>
                 <div className={'request-creation__add-image-icon-area'}>
                     <AddImageIcon />
+                    <input type="file" accept="image/*" />
                 </div>
             </div>
             <div className={'request-creation__task-header-area'}>
@@ -82,13 +97,100 @@ const DateSelection = () => {
     );
 };
 
+const YoshkarOlaLocation: YMapLocationRequest = {
+    center: [47.8908, 56.6388],
+    zoom: 13,
+};
+
+const COMMON_LOCATION_PARAMS: YMapLocationRequest = { easing: 'ease-in-out', duration: 200, zoom: 15 };
+
+const fetchGeoObject = async (position: LngLat) => {
+    try {
+        const res = await fetch(`${GEOCODING_URL}&geocode=${position[0]},${position[1]}`);
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+        const object = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+        if (!object) throw new Error(`GeoObject not found`);
+        return object;
+    } catch (err) {
+        console.error('Error fetching data:', err);
+    }
+};
+
+export const GEOCODING_URL =
+    'https://geocode-maps.yandex.ru/1.x/?apikey=37fa460c-75d3-49f1-a989-5dece7aa4992&format=json&lang=ru_RU';
+
 const PlaceSelection = () => {
+    const [location, setLocation] = useState(YoshkarOlaLocation);
+    const [markerSource, setMarkerSource] = useState<Omit<YMapDefaultMarkerProps, 'popup'>>();
+    const [placeName, setPlaceName] = useState('');
+    const updateMapLocation = useCallback((searchResult: SearchResponse) => {
+        console.log(searchResult);
+        if (searchResult.length !== 0) {
+            let center: LngLat = YoshkarOlaLocation.center;
+            const zoom = 17;
+
+            if (searchResult[0].geometry?.coordinates) center = searchResult[0].geometry?.coordinates;
+            if (searchResult[0].properties.name) setPlaceName(searchResult[0].properties.name);
+            setMarkerSource({ coordinates: center, color: 'red', size: 'normal', iconName: 'fallback' });
+            setLocation({ center, zoom, duration: 200 });
+        }
+    }, []);
+
+    const searchResultHandler = useCallback((searchResult: SearchResponse) => {
+        updateMapLocation(searchResult);
+    }, []);
+
+    const geoObjectUpdate = useCallback(async (position: LngLat) => {
+        const object = await fetchGeoObject(position);
+        if (object) {
+            setPlaceName(object.name);
+        }
+    }, []);
+
+    const onGeolocatePositionUpdate = useCallback(
+        (position: LngLat) => {
+            if (position[0] != markerSource?.coordinates[0] && position[1] != markerSource?.coordinates[1]) {
+                const zoom = 17;
+                setLocation({ center: position, zoom, duration: 200 });
+                setMarkerSource({
+                    coordinates: position,
+                    color: 'red',
+                    size: 'normal',
+                    iconName: 'fallback',
+                });
+                geoObjectUpdate(position);
+            }
+        },
+        [markerSource?.coordinates[0], markerSource?.coordinates[1]],
+    );
     return (
         <div className={'request-creation__place-select-area'}>
             <div className={'request-creation__place-select-subltitle'}>
                 <span>Выбери место, где нужно выполнить твою задачу</span>
             </div>
-            <div className={'request-creation__place-select-buttons'}>
+            <div className="request-creation__yandex-map-area">
+                <YMap location={location}>
+                    <YMapDefaultSchemeLayer />
+                    <YMapDefaultFeaturesLayer />
+                    <YMapControls position="bottom">
+                        <YMapSearchControl
+                            placeholder={placeName ? placeName : 'Поиск по карте'}
+                            searchResult={searchResultHandler}
+                        />
+                    </YMapControls>
+                    <YMapControls position="right">
+                        <YMapGeolocationControl
+                            onGeolocatePosition={onGeolocatePositionUpdate}
+                            {...COMMON_LOCATION_PARAMS}
+                        />
+                    </YMapControls>
+                    {markerSource && <YMapDefaultMarker {...markerSource} />}
+                </YMap>
+            </div>
+            {/*  <div className={'request-creation__place-select-buttons'}>
                 <div>
                     <Button
                         onClick={() => 0}
@@ -104,8 +206,8 @@ const PlaceSelection = () => {
                         borderRound="small"
                         textSize="small"
                     />
-                </div>
-            </div>
+                </div> 
+            </div>*/}
         </div>
     );
 };
@@ -117,7 +219,13 @@ export const RequestCreation = () => {
     return (
         <div className={'request-creation'}>
             <div className={'request-creation__input-area'}>
-                <div className={'request-creation__title'}>
+                <div className={'request-creation__top-panel-area'}>
+                    <div className="top-panel">
+                        <div>
+                            <ChangeThemeIcon />
+                        </div>
+                        <Avatar link="" path="" altText="" />
+                    </div>
                     <h1>Создание заявки от 13 февраля</h1>
                 </div>
                 <div className={'request-creation__stage-area'}>{slider[sliderState]}</div>
