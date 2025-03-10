@@ -8,17 +8,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 50px;
-        width: 90px;
-        height: 90px;
-        background-color: #d9d9d9;
+        width: 85px;
+        height: 85px;
+        & img {
+            display: block;
+            width: 100%;
+        }
     }
-    &__logo-area {
+    &__main-area {
         display: flex;
-        width: 100%;
         flex-direction: column;
         align-items: center;
-        padding-top: 40px;
+        padding: 16px 20px 0 20px;
         gap: 30px;
     }
 
@@ -32,13 +33,20 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        font: var(--text-default);
+        font: var(--text-default-bigger);
+        letter-spacing: 0.04rem;
     }
-    &__user-avatar-area {
+    &__brand-name {
+        font: var(--text-default-accent);
+    }
+    &__main-content {
         width: 100%;
         display: flex;
-        justify-content: flex-end;
-        position: absolute;
-        margin: 16px 20px 0 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+    }
+    &__main-area-container {
+        width: 100%;
     }
 }

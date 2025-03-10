@@ -8,84 +8,44 @@
     &__input-area {
         display: flex;
         flex-direction: column;
-        padding: 0 20px;
-        overflow-y: scroll;
         height: auto;
+        overflow: hidden;
     }
     &__top-panel-area {
-        width: 100%;
-        position: sticky;
-        top: 0px;
-        padding-bottom: 5px;
-        background-color: #ffffff;
-        z-index: 10;
-        gap: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 20px 7px 20px;
         & h1 {
             font: var(--text-title);
+            width: 100%;
+            text-align: center;
         }
     }
-    &__add-image-icon-area {
-        display: flex;
-        width: 100%;
-        justify-content: center;
+    &__top-panel-wrapper {
+        position: sticky;
+        top: 0px;
+        z-index: 10;
+        background-color: var(--white-default);
+        border-bottom: 1px solid var(--gray-default);
     }
-    &__task-image-area {
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-        margin-top: 25px;
-        font: var(--text-input);
-    }
-    &__task-header-area {
-        display: flex;
-        gap: 5px;
-        flex-direction: column;
-        margin-top: 35px;
-        font: var(--text-input);
-    }
-
-    &__task-description-area {
-        display: flex;
-        gap: 5px;
-        flex-direction: column;
-        margin-top: 30px;
-        font: var(--text-input);
-    }
-
     &__pages-navigation-area {
-        padding: 20px 20px 40px 20px;
+        padding: 25px 20px;
+        border-top: 1px solid var(--gray-default);
     }
-    &__date-select-area {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+
+    &__stage-area {
+        padding: 10px 20px 0 20px;
+        overflow-y: scroll;
     }
-    &__calendar-area {
-        margin-top: 15px;
-        display: flex;
-        flex-direction: column;
-        font: var(--text-input);
-        letter-spacing: 0.04em;
-    }
-    &__calendar-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &__time-select-area {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        align-items: center;
-        font: var(--text-input);
-        letter-spacing: 0.04em;
-    }
-    &__place-select-area {
-        display: flex;
-        flex-direction: column;
-        font: var(--text-input);
-    }
-    &__place-select-buttons {
+}
+
+.place-select {
+    display: flex;
+    flex-direction: column;
+    font: var(---text-default);
+    gap: 10px;
+    &__buttons {
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -97,7 +57,89 @@
     }
     &__yandex-map-area {
         width: 100%;
-        height: 65vh;
+        height: 60vh;
+    }
+    &__subltitle {
+        font: var(--text-default);
+    }
+}
+
+.date-select {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    &__calendar-area {
+        display: flex;
+        flex-direction: column;
+        font: var(--text-default);
+        letter-spacing: 0.04em;
+    }
+    &__calendar-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__time-select-area {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        font: var(--text-default);
+        letter-spacing: 0.04em;
+        margin-bottom: 15px;
+    }
+}
+
+.request-task {
+    letter-spacing: 0.04rem;
+    &__task-image-area {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 12px;
+        font: var(--text-default);
+    }
+    &__add-image-icon-area {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+        & input {
+            width: 0.1px;
+            opacity: 0;
+        }
+    }
+    &__task-header-area {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+        margin-top: 20px;
+        font: var(--text-default);
+    }
+    &__task-description-area {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+        margin-top: 20px;
+        font: var(--text-default);
+    }
+    &__big-image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 182px;
+        height: 185px;
+    }
+    &__small-image-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        width: 90px;
+        height: 185px;
     }
 }
 
@@ -105,13 +147,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.options-area {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font: var(--text-default);
 }
 
 .checkbox-input {
@@ -122,7 +157,7 @@
         width: 16px;
         height: 16px;
         border-radius: 5px;
-        border: 1px solid #222222;
+        border: 1px solid var(--black-default);
         box-sizing: border-box;
     }
 }
@@ -130,5 +165,32 @@
 .top-panel {
     display: flex;
     justify-content: space-between;
-    padding-top: 16px;
+    align-items: center;
+    width: 100%;
+}
+
+.small-logo-wrapper {
+    width: 42.5px;
+    height: 42.5px;
+    & img {
+        width: 100%;
+        display: block;
+    }
+}
+
+.task-image {
+    position: relative;
+    &_big img {
+        max-width: 182px;
+        max-height: 185px;
+    }
+    &_small img {
+        max-width: 93px;
+        max-height: 90px;
+    }
+    &__close-icon {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
 }
