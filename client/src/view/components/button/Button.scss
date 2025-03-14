@@ -4,7 +4,7 @@
     border: 1px solid var(--black-default);
     letter-spacing: 0.04rem;
     border-radius: 15px;
-    padding: 15px 40px;
+    padding: 15px 8px;
     display: inline;
     width: 100%;
     font: var(--text-button-default);
@@ -25,5 +25,15 @@
     }
     &_red {
         background-color: var(--red-default);
+    }
+    &_big-padding {
+        padding: 15px 40px;
+    }
+    &_disabled {
+        background-color: var(--gray-lighter);
+    }
+    &_linked {
+        display: inline-block;
+        width: auto;
     }
 }

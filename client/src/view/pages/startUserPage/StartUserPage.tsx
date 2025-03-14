@@ -1,17 +1,22 @@
 import { LinkedButton } from '../../components/button/Button';
-import './RequestsList.scss';
+import './StartUserPage.scss';
 import logo from '../../static/images/logo.png';
-import { TopPanel } from '../requestCreation/RequestCreation';
-import { ChangeThemeIcon } from '../../static/icons/icons';
 import { Avatar } from '../../components/avatar/Avatar';
+import { TopPanel } from '../../components/topPanel/TopPanel';
+import { useEffect } from 'react';
 
-export const RequestsList = () => {
+export const StartUserPage = () => {
+    useEffect(() => {
+        if (window.Telegram.WebApp) {
+            const app = window.Telegram.WebApp;
+            console.log(app.initData);
+        }
+    }, []);
     return (
         <div className={'requests-list'}>
             <div className="requests-list__main-area-container">
                 <div className={'requests-list__main-area'}>
                     <TopPanel>
-                        <ChangeThemeIcon />
                         <Avatar link="" path="" altText="" />
                     </TopPanel>
                     <div className={'requests-list__main-content'}>
@@ -34,7 +39,7 @@ export const RequestsList = () => {
             </div>
             <div className={'requests-list__button-area'}>
                 <div>
-                    <LinkedButton bgColor="yellow" text={'Заказать услугу'} linkTo={'/requestCreation'} />
+                    <LinkedButton bgColor="yellow" text={'Заказать услугу'} linkTo={'/orderCreation'} />
                 </div>
             </div>
         </div>

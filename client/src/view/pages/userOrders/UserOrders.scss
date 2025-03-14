@@ -1,0 +1,66 @@
+.user-orders-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+}
+
+.order-short-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--black-default);
+    border-radius: 10px;
+    letter-spacing: 0.04rem;
+    &__title {
+        font: var(--text-title-low-weight);
+    }
+    &__date {
+        display: flex;
+        gap: 4px;
+        font: var(--text-default);
+    }
+}
+
+.order-state-bar {
+    display: flex;
+    gap: 4px;
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    align-items: center;
+    font: var(--text-default);
+    width: fit-content;
+    & div {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
+    &_in-search {
+        color: var(--yellow-default);
+        & div {
+            background-color: var(--yellow-default);
+        }
+    }
+    &_at-work {
+        color: var(--blue-default);
+        & div {
+            background-color: var(--blue-default);
+        }
+    }
+    &_completed {
+        color: var(--green-default);
+        & div {
+            background-color: var(--green-default);
+        }
+    }
+}
+
+.user-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 20px;
+}

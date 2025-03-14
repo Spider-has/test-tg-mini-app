@@ -11,3 +11,5 @@ export const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarke
 export const { YMapGeolocationControl, YMapSearchControl, YMapDefaultMarker } = reactify.module(
     await import('@yandex/ymaps3-default-ui-theme'),
 );
+
+await ymaps3.ready;

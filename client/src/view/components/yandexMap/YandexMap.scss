@@ -1,0 +1,26 @@
+.place-select {
+    display: flex;
+    flex-direction: column;
+    font: var(---text-default);
+    gap: 5px;
+    &__buttons {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 50%;
+        & div {
+            width: 100%;
+        }
+    }
+    &__yandex-map-area {
+        width: 100%;
+        height: 41vh;
+        min-height: 148px;
+    }
+    &__subltitle {
+        font: var(--text-default);
+        letter-spacing: 0.04rem;
+        padding-left: 20px;
+    }
+}
