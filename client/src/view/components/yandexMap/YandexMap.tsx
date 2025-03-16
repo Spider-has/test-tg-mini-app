@@ -11,6 +11,8 @@ import { YMapDefaultMarkerProps } from '@yandex/ymaps3-default-ui-theme';
 import { useCallback, useState } from 'react';
 import type { LngLat, SearchResponse, YMapLocationRequest } from 'ymaps3';
 import './YandexMap.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { setOrderStreet } from '../../store/orderSlice/order';
 const YoshkarOlaLocation: YMapLocationRequest = {
     center: [47.8908, 56.6388],
     zoom: 13,
@@ -36,11 +38,9 @@ const fetchGeoObject = async (position: LngLat) => {
 const GEOCODING_URL =
     'https://geocode-maps.yandex.ru/1.x/?apikey=37fa460c-75d3-49f1-a989-5dece7aa4992&format=json&lang=ru_RU';
 
-type PlaceSelectionProps = {
-    street: string;
-    setStreet: (street: string) => void;
-};
-export const PlaceSelection = (props: PlaceSelectionProps) => {
+export const PlaceSelection = () => {
+    const orderStreet = useAppSelector(state => state.order.street);
+    const dispatch = useAppDispatch();
     const [location, setLocation] = useState(YoshkarOlaLocation);
     const [markerSource, setMarkerSource] = useState<Omit<YMapDefaultMarkerProps, 'popup'>>();
     const updateMapLocation = useCallback((searchResult: SearchResponse) => {
@@ -50,7 +50,7 @@ export const PlaceSelection = (props: PlaceSelectionProps) => {
             const zoom = 17;
 
             if (searchResult[0].geometry?.coordinates) center = searchResult[0].geometry?.coordinates;
-            if (searchResult[0].properties.name) props.setStreet(searchResult[0].properties.name);
+            if (searchResult[0].properties.name) dispatch(setOrderStreet(searchResult[0].properties.name));
             setMarkerSource({ coordinates: center, color: 'red', size: 'normal', iconName: 'fallback' });
             setLocation({ center, zoom, duration: 200 });
         }
@@ -64,7 +64,7 @@ export const PlaceSelection = (props: PlaceSelectionProps) => {
         const object = await fetchGeoObject(position);
         if (object) {
             console.log(object);
-            props.setStreet(object.name);
+            dispatch(setOrderStreet(object.name));
         }
     }, []);
 
@@ -95,7 +95,7 @@ export const PlaceSelection = (props: PlaceSelectionProps) => {
                     <YMapDefaultFeaturesLayer />
                     <YMapControls position="bottom">
                         <YMapSearchControl
-                            placeholder={props.street ? props.street : 'Поиск по карте'}
+                            placeholder={orderStreet ? orderStreet : 'Поиск по карте'}
                             searchResult={searchResultHandler}
                         />
                     </YMapControls>

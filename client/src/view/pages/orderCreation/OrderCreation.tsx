@@ -2,7 +2,7 @@ import { Button } from '../../components/button/Button';
 import { AddImageIcon } from '../../static/icons/icons';
 import './OrderCreation.scss';
 import { TextAreaInput, TextInput } from '../../components/inputs/Inputs';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import 'color-calendar/dist/css/theme-glass.css';
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from '../../components/avatar/Avatar';
@@ -13,57 +13,69 @@ import { PlaceSelection } from '../../components/yandexMap/YandexMap';
 import { UploadedImage } from '../../components/inputs/ImageUploader';
 import { DateSelection, SelectTimeIntervals } from './dateTimeSelection';
 import { TopPanel } from '../../components/topPanel/TopPanel';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import {
+    deleteOrderImage,
+    OrderCreationFormData,
+    setOrderApartmentNumber,
+    setOrderDescription,
+    setOrderEntrance,
+    setOrderExecTimes,
+    setOrderImage,
+    setOrderTitle,
+} from '../../store/orderSlice/order';
 
 type TaskDescriptionProps = {
-    imagesData: string[];
-    header: string;
-    description: string;
-    addImageHandler: (image: string) => void;
-    onImageCloseHandler: (i: number) => void;
-    setHeaderHandler: (header: string) => void;
-    setDescriptionHandler: (description: string) => void;
     subtitle: string;
 };
 
 const TaskDescription = (props: TaskDescriptionProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const orderData = useAppSelector(state => state.order);
+    const dispatch = useAppDispatch();
     return (
         <div className={'request-task'}>
             <div className={'request-task__task-image-area'}>
                 <span>{props.subtitle}</span>
                 <div className={'request-task__add-image-icon-area'}>
-                    {props.imagesData[0] && (
+                    {orderData.images[0] && (
                         <UploadedImage
-                            src={props.imagesData[0]}
+                            src={orderData.images[0]}
                             alt={'картинка 1'}
                             type={'big'}
                             index={0}
-                            OnCloseAction={props.onImageCloseHandler}
+                            OnCloseAction={(i: number) => {
+                                dispatch(deleteOrderImage(i));
+                            }}
                         />
                     )}
-                    {props.imagesData.length > 1 && (
+                    {orderData.images.length > 1 && (
                         <div className={'request-task__small-image-wrapper'}>
-                            {props.imagesData[1] && (
+                            {orderData.images[1] && (
                                 <UploadedImage
-                                    src={props.imagesData[1]}
+                                    src={orderData.images[1]}
                                     alt={'картинка 2'}
                                     type={'small'}
                                     index={1}
-                                    OnCloseAction={props.onImageCloseHandler}
+                                    OnCloseAction={(i: number) => {
+                                        dispatch(deleteOrderImage(i));
+                                    }}
                                 />
                             )}
-                            {props.imagesData[2] && (
+                            {orderData.images[2] && (
                                 <UploadedImage
-                                    src={props.imagesData[2]}
+                                    src={orderData.images[2]}
                                     alt={'картинка 3'}
                                     type={'small'}
                                     index={2}
-                                    OnCloseAction={props.onImageCloseHandler}
+                                    OnCloseAction={(i: number) => {
+                                        dispatch(deleteOrderImage(i));
+                                    }}
                                 />
                             )}
                         </div>
                     )}
-                    {props.imagesData.length < 3 && (
+                    {orderData.images.length < 3 && (
                         <label>
                             <AddImageIcon />
                             <input
@@ -72,7 +84,7 @@ const TaskDescription = (props: TaskDescriptionProps) => {
                                     reader.onload = event => {
                                         if (event.target?.result) {
                                             const href = event.target.result as string;
-                                            props.addImageHandler(href);
+                                            dispatch(setOrderImage(href));
                                         }
                                     };
                                     if (inputRef.current?.files)
@@ -91,12 +103,12 @@ const TaskDescription = (props: TaskDescriptionProps) => {
                 <TextInput
                     onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
                         if (inpRef.current) {
-                            props.setHeaderHandler(inpRef.current.value);
+                            dispatch(setOrderTitle(inpRef.current.value));
                         }
                     }}
                     placeholder={'Суть задачи'}
                     maxLength={40}
-                    value={props.header}
+                    value={orderData.title}
                 />
             </div>
             <div className={'request-task__task-description-area'}>
@@ -104,11 +116,11 @@ const TaskDescription = (props: TaskDescriptionProps) => {
                 <TextAreaInput
                     onInputHandler={(inpRef: React.RefObject<HTMLTextAreaElement>) => {
                         if (inpRef.current) {
-                            props.setDescriptionHandler(inpRef.current.value);
+                            dispatch(setOrderDescription(inpRef.current.value));
                         }
                     }}
                     placeholder="Подробное описание задачи"
-                    value={props.description}
+                    value={orderData.description}
                 />
             </div>
         </div>
@@ -129,33 +141,19 @@ const timeIntervalToDate = (intervals: string[]): TimeDurations[] => {
     return dates;
 };
 
-type FinalStageProps = OrderCreationFormData & {
-    addImageHandler: (image: string) => void;
-    onImageCloseHandler: (i: number) => void;
-    setHeaderHandler: (header: string) => void;
-    setDescriptionHandler: (description: string) => void;
-    setTimeIntervals: (times: string[]) => void;
-};
-
-const FinalStage = (props: FinalStageProps) => {
+const FinalStage = () => {
+    const orderData = useAppSelector(state => state.order);
+    const dispatch = useAppDispatch();
     return (
         <div className={'creation-final-stage'}>
             <div className={'creation-final-stage__title'}>Проверь данные заказа и измени их, если нужно</div>
-            <TaskDescription
-                imagesData={props.images}
-                header={props.title}
-                description={props.description}
-                addImageHandler={props.addImageHandler}
-                onImageCloseHandler={props.onImageCloseHandler}
-                setHeaderHandler={props.setHeaderHandler}
-                setDescriptionHandler={props.setDescriptionHandler}
-                subtitle={'Фотографии заказа'}
-            />
+            <TaskDescription subtitle={'Добавь 1-3 фотографии своей задачи'} />
             <div className={'creation-final-stage__order-date'}>
                 <SelectTimeIntervals
-                    date={props.execution_date}
-                    intervals={props.execution_times}
-                    setTimeIntervals={props.setTimeIntervals}
+                    intervals={orderData.executionTimes}
+                    setTimeIntervals={(times: string[]) => {
+                        dispatch(setOrderExecTimes(times));
+                    }}
                     subtitle="Желаемое время выполнения задачи"
                 />
             </div>
@@ -166,38 +164,16 @@ const FinalStage = (props: FinalStageProps) => {
     );
 };
 
-type OrderCreationFormData = {
-    images: string[];
-    title: string;
-    description: string;
-    street: string;
-    entrance: string;
-    apartmentNumber: string;
-    execution_date: Date;
-    execution_times: string[];
-};
-
 type TimeDurations = {
     start: Date;
     end: Date;
-};
-
-const defaultOrderData: OrderCreationFormData = {
-    images: [],
-    title: '',
-    description: '',
-    street: '',
-    entrance: '',
-    apartmentNumber: '',
-    execution_date: new Date(),
-    execution_times: [],
 };
 
 const sendAllDataHandler = (OrderData: OrderCreationFormData) => {
     const user_id = 0;
     const client_username = '';
     const adress = `${OrderData.street}, подъезд: ${OrderData.entrance}, квартира: ${OrderData.apartmentNumber}`;
-    const times: TimeDurations[] = timeIntervalToDate(OrderData.execution_times);
+    const times: TimeDurations[] = timeIntervalToDate(OrderData.executionTimes);
     console.log(
         fetchNewOrder(
             toOrderData(
@@ -207,7 +183,7 @@ const sendAllDataHandler = (OrderData: OrderCreationFormData) => {
                 OrderData.title,
                 OrderData.description,
                 adress,
-                OrderData.execution_date,
+                OrderData.executionDate,
                 times,
             ),
         ),
@@ -215,94 +191,24 @@ const sendAllDataHandler = (OrderData: OrderCreationFormData) => {
 };
 
 export const RequestCreation = () => {
+    const orderData = useAppSelector(state => state.order);
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [sliderState, setSliderState] = useState(0);
-    const [OrderData, setOrderData] = useState<OrderCreationFormData>(defaultOrderData);
-
-    const setOrderHeader = useCallback((header: string) => {
-        setOrderData(order => {
-            return { ...order, title: header };
-        });
-    }, []);
-    const setOrderDescription = useCallback((description: string) => {
-        setOrderData(order => {
-            return { ...order, description: description };
-        });
-    }, []);
-    const setOrderImage = useCallback((image: string) => {
-        setOrderData(order => {
-            return { ...order, images: [...order.images, image] };
-        });
-    }, []);
-    const deleteOrderImage = useCallback((i: number) => {
-        setOrderData(order => {
-            return { ...order, images: order.images.toSpliced(i, 1) };
-        });
-    }, []);
-    const setOrderStreet = useCallback((street: string) => {
-        setOrderData(order => {
-            return { ...order, street: street };
-        });
-    }, []);
-    const setOrderApartmentNumber = useCallback((apartmentNumber: string) => {
-        setOrderData(order => {
-            return { ...order, apartmentNumber: apartmentNumber };
-        });
-    }, []);
-    const setOrderEntrance = useCallback((entrance: string) => {
-        setOrderData(order => {
-            return { ...order, entrance: entrance };
-        });
-    }, []);
-    const setOrderDate = useCallback((date: Date) => {
-        setOrderData(order => {
-            return { ...order, execution_date: date };
-        });
-    }, []);
-    const setOrderDurTimes = useCallback((times: string[]) => {
-        setOrderData(order => {
-            return { ...order, execution_times: times };
-        });
-    }, []);
 
     const slider = [
-        <TaskDescription
-            setDescriptionHandler={setOrderDescription}
-            setHeaderHandler={setOrderHeader}
-            imagesData={OrderData.images}
-            addImageHandler={setOrderImage}
-            onImageCloseHandler={deleteOrderImage}
-            key={0}
-            header={OrderData.title}
-            description={OrderData.description}
-            subtitle="Добавь 1-3 фотографии своей задачи"
-        />,
-        <DateSelection
-            key={1}
-            date={OrderData.execution_date}
-            intervals={OrderData.execution_times}
-            setDateHandler={setOrderDate}
-            setTimeIntervals={setOrderDurTimes}
-        />,
-        <PlaceSelection street={OrderData.street} setStreet={setOrderStreet} key={2} />,
-        <FinalStage
-            setTimeIntervals={setOrderDurTimes}
-            key={3}
-            {...OrderData}
-            addImageHandler={setOrderImage}
-            onImageCloseHandler={deleteOrderImage}
-            setHeaderHandler={setOrderHeader}
-            setDescriptionHandler={setOrderDescription}
-        />,
+        <TaskDescription key={0} subtitle={'Добавь 1-3 фотографии своей задачи'} />,
+        <DateSelection key={1} />,
+        <PlaceSelection key={2} />,
+        <FinalStage key={3} />,
     ];
     const buttonGapClass = sliderState == slider.length - 1 ? 'navigation-buttons_small-gap' : '';
-    console.log(OrderData);
     const nextButtonDisabled = () => {
         switch (sliderState) {
             case 0:
-                return OrderData.title == '';
+                return orderData.title === '';
             case 2:
-                return OrderData.street == '';
+                return orderData.street == '';
             default:
                 return false;
         }
@@ -322,12 +228,12 @@ export const RequestCreation = () => {
                             <TextInput
                                 onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
                                     if (inpRef.current) {
-                                        setOrderEntrance(inpRef.current.value);
+                                        dispatch(setOrderEntrance(inpRef.current.value));
                                     }
                                 }}
                                 placeholder={'Подъезд'}
                                 maxLength={20}
-                                value={OrderData.entrance}
+                                value={orderData.entrance}
                             />
                         </div>
                         <div className={'place-data__input-area'}>
@@ -335,12 +241,12 @@ export const RequestCreation = () => {
                             <TextInput
                                 onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
                                     if (inpRef.current) {
-                                        setOrderApartmentNumber(inpRef.current.value);
+                                        dispatch(setOrderApartmentNumber(inpRef.current.value));
                                     }
                                 }}
                                 placeholder={'Квартира'}
                                 maxLength={20}
-                                value={OrderData.apartmentNumber}
+                                value={orderData.apartmentNumber}
                             />
                         </div>
                     </div>
@@ -390,7 +296,7 @@ export const RequestCreation = () => {
                             <div>
                                 <Button
                                     onClick={() => {
-                                        sendAllDataHandler(OrderData);
+                                        sendAllDataHandler(orderData);
                                     }}
                                     bgColor="green"
                                     text={'Подтвердить'}

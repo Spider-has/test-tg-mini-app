@@ -1,6 +1,8 @@
 import Calendar from 'color-calendar';
 import { useCallback, useEffect, useMemo } from 'react';
 import { OptionProps, OptionsList } from '../../components/inputs/Inputs';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { setOrderDate, setOrderExecTimes } from '../../store/orderSlice/order';
 
 const dayTimeOptions = [
     { text: '8:00 - 10:00' },
@@ -16,14 +18,10 @@ const options: Intl.DateTimeFormatOptions = {
     day: '2-digit',
 };
 
-type DateSelectionProps = {
-    date: Date;
-    intervals: string[];
-    setTimeIntervals: (intervals: string[]) => void;
-    setDateHandler: (date: Date) => void;
-};
-
-export const DateSelection = (props: DateSelectionProps) => {
+export const DateSelection = () => {
+    const orderDate = useAppSelector(state => state.order.executionDate);
+    const orderIntevals = useAppSelector(state => state.order.executionTimes);
+    const dispatch = useAppDispatch();
     useEffect(() => {
         const calendar = new Calendar({
             id: '#color-calendar',
@@ -44,10 +42,10 @@ export const DateSelection = (props: DateSelectionProps) => {
             dropShadow: 'none',
             dateChanged: (currentDate: unknown) => {
                 const newDate = currentDate as Date;
-                props.setDateHandler(newDate);
+                dispatch(setOrderDate(newDate));
             },
         });
-        calendar.setDate(props.date);
+        calendar.setDate(orderDate);
     }, []);
 
     return (
@@ -59,10 +57,11 @@ export const DateSelection = (props: DateSelectionProps) => {
                 </div>
             </div>
             <SelectTimeIntervals
-                date={props.date}
-                intervals={props.intervals}
-                setTimeIntervals={props.setTimeIntervals}
-                subtitle={`Выбери желательное время выполнения задачи на ${props.date.toLocaleDateString(
+                intervals={orderIntevals}
+                setTimeIntervals={(times: string[]) => {
+                    dispatch(setOrderExecTimes(times));
+                }}
+                subtitle={`Выбери желательное время выполнения задачи на ${orderDate.toLocaleDateString(
                     'ru',
                     options,
                 )}`}
@@ -72,7 +71,6 @@ export const DateSelection = (props: DateSelectionProps) => {
 };
 
 type TimeIntervalsSelectionProps = {
-    date: Date;
     intervals: string[];
     setTimeIntervals: (intervals: string[]) => void;
     subtitle: string;
