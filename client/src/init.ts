@@ -6,8 +6,9 @@ import {
     initData,
     init as initSDK,
     $debug,
-    isTMA,
 } from '@telegram-apps/sdk-react';
+
+import eruda from 'eruda';
 
 export async function init(debug: boolean) {
     // Set @telegram-apps/sdk-react debug mode.
@@ -18,7 +19,9 @@ export async function init(debug: boolean) {
     initSDK();
 
     // Add Eruda if needed.
-    debug && import('eruda').then(lib => lib.default.init()).catch(console.error);
+    if (debug) {
+        eruda.init();
+    }
 
     // Check if all required components are supported.
     if (!backButton.isSupported() || !miniApp.isSupported()) {
