@@ -3,15 +3,16 @@ import './StartUserPage.scss';
 import logo from '../../static/images/logo.png';
 import { Avatar } from '../../components/avatar/Avatar';
 import { TopPanel } from '../../components/topPanel/TopPanel';
-import { useEffect } from 'react';
+import { initData, useSignal } from '@telegram-apps/sdk-react';
+import { useMemo } from 'react';
 
 export const StartUserPage = () => {
-    useEffect(() => {
-        if (window.Telegram.WebApp) {
-            const app = window.Telegram.WebApp;
-            console.log(app.initData);
-        }
-    }, []);
+    const initDataState = useSignal(initData.state);
+    const userRows = useMemo(() => {
+        return initDataState?.user;
+    }, [initDataState]);
+    console.log(userRows);
+    console.log(initDataState);
     return (
         <div className={'requests-list'}>
             <div className="requests-list__main-area-container">
