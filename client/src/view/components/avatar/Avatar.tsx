@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../hooks/hooks';
 import './Avatar.scss';
 
 type AvatarProps = {
@@ -6,10 +7,11 @@ type AvatarProps = {
     link: string;
 };
 
-export const Avatar = (props: AvatarProps) => {
+export const Avatar = () => {
+    const avatar = useAppSelector(state => state.user.avatarUrl);
     return (
         <div className={'avatar'}>
-            <img src={props.path} alt={props.altText} />
+            <img src={avatar} alt={'Ваш аватар'} />
         </div>
     );
 };

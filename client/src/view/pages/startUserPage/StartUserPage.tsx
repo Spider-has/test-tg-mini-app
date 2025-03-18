@@ -3,22 +3,14 @@ import './StartUserPage.scss';
 import logo from '../../static/images/logo.png';
 import { Avatar } from '../../components/avatar/Avatar';
 import { TopPanel } from '../../components/topPanel/TopPanel';
-import { initData, useSignal } from '@telegram-apps/sdk-react';
-import { useMemo } from 'react';
 
 export const StartUserPage = () => {
-    const initDataState = useSignal(initData.state);
-    const userRows = useMemo(() => {
-        return initDataState?.user;
-    }, [initDataState]);
-    console.log(userRows);
-    console.log(initDataState);
     return (
         <div className={'requests-list'}>
             <div className="requests-list__main-area-container">
                 <div className={'requests-list__main-area'}>
                     <TopPanel>
-                        <Avatar link="" path="" altText="" />
+                        <Avatar />
                     </TopPanel>
                     <div className={'requests-list__main-content'}>
                         <div className={'requests-list__logo'}>

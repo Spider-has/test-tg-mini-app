@@ -1,10 +1,12 @@
 import { configureStore, Tuple } from '@reduxjs/toolkit';
 import orderReducer from './orderSlice/order';
 import logger from 'redux-logger';
+import userReducer from './userSlice/user';
 
 const store = configureStore({
     reducer: {
         order: orderReducer,
+        user: userReducer,
     },
     middleware: () => new Tuple(logger),
 });

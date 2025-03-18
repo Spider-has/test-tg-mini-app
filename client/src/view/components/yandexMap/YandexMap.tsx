@@ -89,7 +89,7 @@ export const PlaceSelection = () => {
             <div className={'place-select__subltitle'}>
                 <span>Укажи адрес, куда приехать исполнителю</span>
             </div>
-            <div className="place-select__yandex-map-area">
+            {/* <div className="place-select__yandex-map-area">
                 <YMap location={location}>
                     <YMapDefaultSchemeLayer />
                     <YMapDefaultFeaturesLayer />
@@ -107,7 +107,7 @@ export const PlaceSelection = () => {
                     </YMapControls>
                     {markerSource && <YMapDefaultMarker {...markerSource} />}
                 </YMap>
-            </div>
+            </div> */}
         </div>
     );
 };

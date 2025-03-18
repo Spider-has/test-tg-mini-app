@@ -2,7 +2,7 @@ import { Button } from '../../components/button/Button';
 import { AddImageIcon } from '../../static/icons/icons';
 import './OrderCreation.scss';
 import { TextAreaInput, TextInput } from '../../components/inputs/Inputs';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'color-calendar/dist/css/theme-glass.css';
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from '../../components/avatar/Avatar';
@@ -22,81 +22,89 @@ import {
     setOrderEntrance,
     setOrderExecTimes,
     setOrderImage,
+    setOrderStreet,
     setOrderTitle,
 } from '../../store/orderSlice/order';
 
-type TaskDescriptionProps = {
+type TaskMainDataProps = {
     subtitle: string;
 };
 
-const TaskDescription = (props: TaskDescriptionProps) => {
+const UploadTaskImagesArea = () => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const orderData = useAppSelector(state => state.order);
+    const orderImages = useAppSelector(state => state.order.images);
     const dispatch = useAppDispatch();
     return (
-        <div className={'request-task'}>
-            <div className={'request-task__task-image-area'}>
-                <span>{props.subtitle}</span>
-                <div className={'request-task__add-image-icon-area'}>
-                    {orderData.images[0] && (
+        <div className={'request-task__add-image-icon-area'}>
+            {orderImages[0] && (
+                <UploadedImage
+                    src={orderImages[0]}
+                    alt={'картинка 1'}
+                    type={'big'}
+                    index={0}
+                    OnCloseAction={(i: number) => {
+                        dispatch(deleteOrderImage(i));
+                    }}
+                />
+            )}
+            {orderImages.length > 1 && (
+                <div className={'request-task__small-image-wrapper'}>
+                    {orderImages[1] && (
                         <UploadedImage
-                            src={orderData.images[0]}
-                            alt={'картинка 1'}
-                            type={'big'}
-                            index={0}
+                            src={orderImages[1]}
+                            alt={'картинка 2'}
+                            type={'small'}
+                            index={1}
                             OnCloseAction={(i: number) => {
                                 dispatch(deleteOrderImage(i));
                             }}
                         />
                     )}
-                    {orderData.images.length > 1 && (
-                        <div className={'request-task__small-image-wrapper'}>
-                            {orderData.images[1] && (
-                                <UploadedImage
-                                    src={orderData.images[1]}
-                                    alt={'картинка 2'}
-                                    type={'small'}
-                                    index={1}
-                                    OnCloseAction={(i: number) => {
-                                        dispatch(deleteOrderImage(i));
-                                    }}
-                                />
-                            )}
-                            {orderData.images[2] && (
-                                <UploadedImage
-                                    src={orderData.images[2]}
-                                    alt={'картинка 3'}
-                                    type={'small'}
-                                    index={2}
-                                    OnCloseAction={(i: number) => {
-                                        dispatch(deleteOrderImage(i));
-                                    }}
-                                />
-                            )}
-                        </div>
-                    )}
-                    {orderData.images.length < 3 && (
-                        <label>
-                            <AddImageIcon />
-                            <input
-                                onChange={() => {
-                                    const reader = new FileReader();
-                                    reader.onload = event => {
-                                        if (event.target?.result) {
-                                            const href = event.target.result as string;
-                                            dispatch(setOrderImage(href));
-                                        }
-                                    };
-                                    if (inputRef.current?.files)
-                                        reader.readAsDataURL(inputRef.current?.files[0]);
-                                }}
-                                ref={inputRef}
-                                type="file"
-                                accept="image/png, image/jpeg"
-                            />
-                        </label>
+                    {orderImages[2] && (
+                        <UploadedImage
+                            src={orderImages[2]}
+                            alt={'картинка 3'}
+                            type={'small'}
+                            index={2}
+                            OnCloseAction={(i: number) => {
+                                dispatch(deleteOrderImage(i));
+                            }}
+                        />
                     )}
                 </div>
+            )}
+            {orderImages.length < 3 && (
+                <label className="request-task__add-image-icon">
+                    <AddImageIcon />
+                    <input
+                        onChange={() => {
+                            const reader = new FileReader();
+                            reader.onload = event => {
+                                if (event.target?.result) {
+                                    const href = event.target.result as string;
+                                    dispatch(setOrderImage(href));
+                                }
+                            };
+                            if (inputRef.current?.files) reader.readAsDataURL(inputRef.current?.files[0]);
+                        }}
+                        ref={inputRef}
+                        type="file"
+                        accept="image/png, image/jpeg"
+                    />
+                </label>
+            )}
+        </div>
+    );
+};
+
+const TaskMainData = (props: TaskMainDataProps) => {
+    const [title, description] = useAppSelector(state => [state.order.title, state.order.description]);
+    const dispatch = useAppDispatch();
+    return (
+        <div className={'request-task'}>
+            <div className={'request-task__task-image-area'}>
+                <span>{props.subtitle}</span>
+                <UploadTaskImagesArea />
             </div>
             <div className={'request-task__task-header-area'}>
                 <span>Опиши суть задачи несколькими словами</span>
@@ -108,7 +116,7 @@ const TaskDescription = (props: TaskDescriptionProps) => {
                     }}
                     placeholder={'Суть задачи'}
                     maxLength={40}
-                    value={orderData.title}
+                    value={title}
                 />
             </div>
             <div className={'request-task__task-description-area'}>
@@ -120,7 +128,7 @@ const TaskDescription = (props: TaskDescriptionProps) => {
                         }
                     }}
                     placeholder="Подробное описание задачи"
-                    value={orderData.description}
+                    value={description}
                 />
             </div>
         </div>
@@ -147,7 +155,7 @@ const FinalStage = () => {
     return (
         <div className={'creation-final-stage'}>
             <div className={'creation-final-stage__title'}>Проверь данные заказа и измени их, если нужно</div>
-            <TaskDescription subtitle={'Добавь 1-3 фотографии своей задачи'} />
+            <TaskMainData subtitle={'Добавь 1-3 фотографии своей задачи'} />
             <div className={'creation-final-stage__order-date'}>
                 <SelectTimeIntervals
                     intervals={orderData.executionTimes}
@@ -197,7 +205,7 @@ export const RequestCreation = () => {
     const [sliderState, setSliderState] = useState(0);
 
     const slider = [
-        <TaskDescription key={0} subtitle={'Добавь 1-3 фотографии своей задачи'} />,
+        <TaskMainData key={0} subtitle={'Добавь 1-3 фотографии своей задачи'} />,
         <DateSelection key={1} />,
         <PlaceSelection key={2} />,
         <FinalStage key={3} />,
@@ -215,12 +223,23 @@ export const RequestCreation = () => {
     };
     return (
         <div className={'request-creation'}>
-            <PageMainAreaWrapper header={'Создание заявки'}>{slider[sliderState]}</PageMainAreaWrapper>
+            <PageMainAreaWrapper currentStage={sliderState} header={'Создание заявки'}>
+                {slider}
+            </PageMainAreaWrapper>
             {sliderState === 2 && (
                 <div className={'place-data'}>
                     <div className={'place-data__input-area'}>
                         <span>Город, улица и дом</span>
-                        {/* <TextInput  placeholder={'Введите адрес'} maxLength={100} /> */}
+                        <TextInput
+                            placeholder={'Введите адрес'}
+                            maxLength={100}
+                            value={orderData.street}
+                            onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
+                                if (inpRef.current) {
+                                    dispatch(setOrderStreet(inpRef.current.value));
+                                }
+                            }}
+                        />
                     </div>
                     <div className={'place-data__twice-input-area'}>
                         <div className={'place-data__input-area'}>
@@ -310,21 +329,41 @@ export const RequestCreation = () => {
     );
 };
 
-export const PageMainAreaWrapper = (props: { children: React.ReactNode; header: string }) => {
+export const PageMainAreaWrapper = (props: {
+    children: React.ReactNode[];
+    header: string;
+    currentStage: number;
+}) => {
+    const slideTrackRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (slideTrackRef.current) {
+            const size = slideTrackRef.current.offsetWidth;
+            slideTrackRef.current.style.transform = `translateX(${-size * props.currentStage}px)`;
+        }
+    }, [props.currentStage]);
     return (
         <div className={'page-main-area'}>
             <div className={'page-main-area__top-panel-wrapper'}>
                 <div className={'page-main-area__top-panel-area'}>
                     <TopPanel>
+                        <Avatar />
                         <div className={'small-logo-wrapper'}>
                             <img src={logo} alt="лого" />
                         </div>
-                        <Avatar link="" path="" altText="" />
                     </TopPanel>
                     <h1>{props.header}</h1>
                 </div>
             </div>
-            <div className={'page-main-area__main-content-area'}>{props.children}</div>
+
+            <div className={'page-main-area__main-content-area'}>
+                <div ref={slideTrackRef} className={'page-main-area__slide-track'}>
+                    {props.children.map((elem, i) => (
+                        <div className="page-main-area__stage-wrappper" key={i}>
+                            {elem}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };

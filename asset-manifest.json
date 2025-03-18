@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.05e7e12d.css",
-    "main.js": "/static/js/main.969a6d8c.js",
+    "main.css": "/static/css/main.8bcc64ec.css",
+    "main.js": "/static/js/main.03bc35d1.js",
+    "static/media/osidron_avatar.jpg": "/static/media/osidron_avatar.6e952f88b1c1697328cd.jpg",
     "index.html": "/index.html",
-    "main.05e7e12d.css.map": "/static/css/main.05e7e12d.css.map",
-    "main.969a6d8c.js.map": "/static/js/main.969a6d8c.js.map"
+    "main.8bcc64ec.css.map": "/static/css/main.8bcc64ec.css.map",
+    "main.03bc35d1.js.map": "/static/js/main.03bc35d1.js.map"
   },
   "entrypoints": [
-    "static/css/main.05e7e12d.css",
-    "static/js/main.969a6d8c.js"
+    "static/css/main.8bcc64ec.css",
+    "static/js/main.03bc35d1.js"
   ]
 }

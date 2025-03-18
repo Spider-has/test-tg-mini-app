@@ -5,7 +5,7 @@ import {
     parseInitData,
     retrieveLaunchParams,
 } from '@telegram-apps/sdk-react';
-
+import osidronAvatar from './view/static/images/osidron_avatar.jpg';
 const metaData = true;
 
 export const tgInitData = async () => {
@@ -26,7 +26,7 @@ export const tgInitData = async () => {
                         language_code: 'ru',
                         is_premium: false,
                         allows_write_to_pm: true,
-                        photo_url: '',
+                        photo_url: osidronAvatar,
                     }),
                 ],
                 ['hash', '89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31'],

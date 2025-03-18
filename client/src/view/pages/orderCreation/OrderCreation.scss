@@ -45,8 +45,19 @@
 
     &__main-content-area {
         padding-top: 10px;
+        overflow-x: hidden;
         overflow-y: scroll;
         flex-grow: 1;
+    }
+    &__stage-wrappper {
+        flex-shrink: 0;
+        width: 100%;
+    }
+    &__slide-track {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        transition: all 0.2s ease;
     }
 }
 
@@ -55,6 +66,7 @@
     flex-direction: column;
     gap: 15px;
     padding: 0 20px;
+    flex-shrink: 0;
     &__calendar-area {
         display: flex;
         flex-direction: column;
@@ -84,12 +96,24 @@
 .request-task {
     letter-spacing: 0.04rem;
     padding: 0 20px;
+    flex-shrink: 0;
     &__task-image-area {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         gap: 12px;
         font: var(--text-default);
+    }
+    &__add-image-icon {
+        padding: 10px;
+        position: relative;
+        & input {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 0.1px;
+            opacity: 0;
+        }
     }
     &__add-image-icon-area {
         display: flex;
@@ -98,10 +122,6 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 5px;
-        & input {
-            width: 0.1px;
-            opacity: 0;
-        }
     }
     &__task-header-area {
         display: flex;
@@ -211,6 +231,7 @@
     border-radius: 15px 15px 0 0;
     z-index: 10;
     gap: 5px;
+    flex-shrink: 0;
     &__input-area {
         display: flex;
         flex-direction: column;
