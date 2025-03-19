@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
 import { LinkedButton } from '../../components/button/Button';
 import { CalendarIcon } from '../../static/icons/icons';
 import { BottomNavigationPanel, PageMainAreaWrapper } from '../orderCreation/OrderCreation';
 import './UserOrders.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { fetchOrders } from '../../store/orderListSlice/orderList';
+import { AppDispatch } from '../../store/store';
 
 export enum OrderState {
     IN_SEARCH,
@@ -105,6 +109,22 @@ const defaultOrderList: UserOrderListProps = {
 };
 
 export const UserOrders = () => {
+    // const dispatch = useAppDispatch();
+    // const userId = useAppSelector(state => state.user.chatId);
+    // const OrdersList = useAppSelector(state => state.ordersList);
+    // useEffect(() => {
+    //     // dispatch(fetchOrders(userId));
+    //     fetch('http://217.114.14.144:80/api/v1/task/1?page=1&limit=10', {
+    //         method: 'get',
+    //         mode: 'no-cors',
+    //     })
+    //         .then(res => res.json())
+    //         .then(res => console.log(res))
+    //         .catch(err => {
+    //             console.log(err);
+    //         });
+    // }, []);
+    // console.log(OrdersList);
     return (
         <div className="user-orders-page">
             <PageMainAreaWrapper header={'Мои заказы'}>

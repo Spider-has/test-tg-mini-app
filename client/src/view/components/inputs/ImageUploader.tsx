@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CloseIcon } from '../../static/icons/icons';
+import { CloseIcon, MagnifierIcon } from '../../static/icons/icons';
 
 type UploadedImageProps = {
     src: string;
@@ -7,6 +7,7 @@ type UploadedImageProps = {
     type: 'big' | 'small';
     index: number;
     OnCloseAction: (imageI: number) => void;
+    onFullSizeAction: () => void;
 };
 
 export const UploadedImage = memo(function UploadedImage(props: UploadedImageProps) {
@@ -16,15 +17,49 @@ export const UploadedImage = memo(function UploadedImage(props: UploadedImagePro
     return (
         <div className={containerSizeType}>
             <div className={`task-image ${imageSizeType}`}>
-                <img src={props.src} alt={props.alt} />
                 <div
-                    className={'task-image__close-icon'}
+                    onClick={() => {
+                        props.onFullSizeAction();
+                    }}
+                >
+                    <img src={props.src} alt={props.alt} />
+                </div>
+
+                <div
+                    className={'img-close-icon'}
                     onClick={() => {
                         props.OnCloseAction(props.index);
                     }}
                 >
                     <CloseIcon />
                 </div>
+                <div className={'task-image__zoom-icon'}>
+                    <MagnifierIcon />
+                </div>
+            </div>
+        </div>
+    );
+});
+
+type FullSizeImageProps = {
+    src: string;
+    alt: string;
+    OnCloseAction: () => void;
+};
+
+export const FullSizeImage = memo(function FullSizeImage(props: FullSizeImageProps) {
+    return (
+        <div className={`full-size-image`}>
+            <div>
+                <img src={props.src} alt={props.alt} />
+            </div>
+            <div
+                className={'img-close-icon img-close-icon_full-sized'}
+                onClick={() => {
+                    props.OnCloseAction();
+                }}
+            >
+                <CloseIcon />
             </div>
         </div>
     );

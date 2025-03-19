@@ -1,0 +1,16 @@
+.error-message {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font: var(--text-default);
+    opacity: 0;
+    transform: scale(1, 0);
+    transform-origin: top;
+    transition: all 0.2s ease;
+    height: 0px;
+    &_show {
+        transform: scale(1, 1);
+        opacity: 1;
+        height: auto;
+    }
+}

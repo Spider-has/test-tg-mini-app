@@ -42,8 +42,6 @@ const Navigation = () => {
             dispatch(setUserData(userData));
         }
     }, [userRows]);
-    console.log(userRows);
-    console.log(initDataState);
     return (
         <BrowserRouter
             future={{

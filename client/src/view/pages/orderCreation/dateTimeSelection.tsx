@@ -1,8 +1,9 @@
 import Calendar from 'color-calendar';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { OptionProps, OptionsList } from '../../components/inputs/Inputs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { setOrderDate, setOrderExecTimes } from '../../store/orderSlice/order';
+import { setOrderDate, setOrderExecTimes } from '../../store/orderCreationSlice/orderCreation';
+import { ErrorMessage } from '../../components/errorMessage/ErrorMessage';
 
 const dayTimeOptions = [
     { text: '8:00 - 10:00' },
@@ -18,12 +19,19 @@ const options: Intl.DateTimeFormatOptions = {
     day: '2-digit',
 };
 
-export const DateSelection = () => {
+type DateSelectionProps = {
+    validityCheck: boolean;
+};
+
+export const DateSelection = (props: DateSelectionProps) => {
     const orderDate = useAppSelector(state => state.order.executionDate);
     const orderIntevals = useAppSelector(state => state.order.executionTimes);
     const dispatch = useAppDispatch();
+    const calendar = useRef<Calendar>();
+    const [errorDate, setErrorDate] = useState(false);
     useEffect(() => {
-        const calendar = new Calendar({
+        const today = new Date();
+        calendar.current = new Calendar({
             id: '#color-calendar',
             theme: 'glass',
             weekdayType: 'long-upper',
@@ -38,16 +46,24 @@ export const DateSelection = () => {
             calendarSize: 'small',
             customWeekdayValues: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
             disableMonthYearPickers: true,
-            disableMonthArrowClick: true,
             dropShadow: 'none',
             dateChanged: (currentDate: unknown) => {
                 const newDate = currentDate as Date;
-                dispatch(setOrderDate(newDate));
+                console.log(newDate > today);
+                if (newDate > today) {
+                    dispatch(setOrderDate(newDate));
+                } else setErrorDate(true);
             },
         });
-        calendar.setDate(orderDate);
+        calendar.current.setDate(orderDate);
     }, []);
-
+    useEffect(() => {
+        console.log(1);
+        if (errorDate) {
+            calendar.current?.reset(new Date());
+            setErrorDate(false);
+        }
+    }, [errorDate]);
     return (
         <div className={'date-select'}>
             <div className={'date-select__calendar-area'}>
@@ -61,6 +77,7 @@ export const DateSelection = () => {
                 setTimeIntervals={(times: string[]) => {
                     dispatch(setOrderExecTimes(times));
                 }}
+                validityCheck={props.validityCheck}
                 subtitle={`Выбери желательное время выполнения задачи на ${orderDate.toLocaleDateString(
                     'ru',
                     options,
@@ -74,6 +91,7 @@ type TimeIntervalsSelectionProps = {
     intervals: string[];
     setTimeIntervals: (intervals: string[]) => void;
     subtitle: string;
+    validityCheck: boolean;
 };
 
 export const SelectTimeIntervals = (props: TimeIntervalsSelectionProps) => {
@@ -102,10 +120,20 @@ export const SelectTimeIntervals = (props: TimeIntervalsSelectionProps) => {
             return { text: elem.text, isSelected: selected };
         });
     }, [props.intervals]);
+    const showErrorMessage = useMemo(() => {
+        if (props.validityCheck) return props.intervals.length === 0;
+        return false;
+    }, [props.validityCheck, props.intervals]);
     return (
         <div className={'time-selection-area'}>
             <span>{props.subtitle}</span>
             <OptionsList options={optionList} onCheckboxClick={onCheckBoxHandler} />
+            <div className={'time-selection-area__error-area'}>
+                <ErrorMessage
+                    shown={showErrorMessage}
+                    text={'Должен быть выбран хотя бы один временной промежуток'}
+                />
+            </div>
         </div>
     );
 };

@@ -1,27 +1,31 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import './Inputs.scss';
 
-type TextInputProps = {
+type InputProps = {
     placeholder: string;
-    maxLength: number;
-    onInputHandler: (inputRef: React.RefObject<HTMLInputElement>) => void;
     value: string;
+    isNotValid?: boolean;
 };
 
-type TextAreaProps = {
-    placeholder: string;
-    value: string;
+type TextInputProps = InputProps & {
+    maxLength: number;
+    onInputHandler: (inputRef: React.RefObject<HTMLInputElement>) => void;
+};
+
+type TextAreaProps = InputProps & {
+    rowsCount?: number;
     onInputHandler: (inputRef: React.RefObject<HTMLTextAreaElement>) => void;
 };
 
 export const TextInput = (props: TextInputProps) => {
     const inpRef = useRef<HTMLInputElement>(null);
+    const validClass = props.isNotValid ? 'input_non-valid' : '';
     return (
         <input
             onInput={() => {
                 props.onInputHandler(inpRef);
             }}
-            className={'input'}
+            className={`input ${validClass}`}
             type="text"
             ref={inpRef}
             maxLength={props.maxLength}
@@ -33,16 +37,21 @@ export const TextInput = (props: TextInputProps) => {
 
 export const TextAreaInput = (props: TextAreaProps) => {
     const textArea = useRef<HTMLTextAreaElement>(null);
+    const inputMultiClass = props.rowsCount ? '' : 'input_multi-line';
+    const validClass = props.isNotValid ? 'input_non-valid' : '';
+    useEffect(() => {
+        if (textArea.current && textArea.current.scrollHeight > textArea.current.offsetHeight) {
+            textArea.current.style.height = textArea.current.scrollHeight + 'px';
+        }
+    }, [props.value]);
     return (
         <textarea
             ref={textArea}
             onInput={() => {
-                if (textArea.current) {
-                    textArea.current.style.height = textArea.current.scrollHeight + 'px';
-                }
                 props.onInputHandler(textArea);
             }}
-            className={'input input_multi-line'}
+            rows={props.rowsCount ? props.rowsCount : 0}
+            className={`input ${inputMultiClass} ${validClass}`}
             placeholder={props.placeholder}
             value={props.value}
         ></textarea>

@@ -4,9 +4,10 @@ import './Button.scss';
 type ButtonProps = {
     onClick: () => void;
     text: string;
+    onDisabledClick?: () => void;
     borderRound?: 'small' | 'normal';
     textSize?: 'small' | 'normal';
-    bgColor: 'yellow' | 'green' | 'red' | 'gray';
+    bgColor: 'yellow' | 'green' | 'red' | 'gray' | 'white';
     isDisabled?: boolean;
 };
 
@@ -24,8 +25,11 @@ export const Button = (props: ButtonProps): JSX.Element => {
     return (
         <button
             className={`button ${borderRadClass} ${textSizeClass} ${buttonBackColor} ${disabledClass}`}
-            onClick={props.onClick}
-            disabled={props.isDisabled}
+            onClick={() => {
+                if (props.isDisabled === false || props.isDisabled === undefined) props.onClick();
+                else if (props.onDisabledClick) props.onDisabledClick();
+            }}
+            //disabled={props.isDisabled}
         >
             {props.text}
         </button>

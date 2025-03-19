@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Quicksand:wght@300..700&display=swap');
-@import '../node_modules/@yandex/ymaps3-default-ui-theme/dist/esm/index.css';
 *,
 *::after,
 *::before {
@@ -24,10 +23,10 @@ body {
     --gray-lighter: #838383;
     --blue-default: #4a90e2;
 
-    --text-default: 400 12px 'Lato', sans-serif;
-    --text-default-bigger: 400 14px 'Lato', sans-serif;
-    --text-default-accent: 600 14px 'Quicksand', sans-serif;
-    --text-title: 500 16px 'Quicksand', sans-serif;
-    --text-button-default: 500 16px 'Lato', sans-serif;
+    --text-default: 400 14px 'Lato', sans-serif;
+    --text-default-bigger: 400 16px 'Lato', sans-serif;
+    --text-default-accent: 400 14px 'Quicksand', sans-serif;
+    --text-title: 500 18px 'Quicksand', sans-serif;
+    --text-button-default: 500 18px 'Lato', sans-serif;
     --text-title-low-weight: 400 14px 'Quicksand', sans-serif;
 }

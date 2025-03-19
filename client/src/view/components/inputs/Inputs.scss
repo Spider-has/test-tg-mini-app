@@ -3,8 +3,9 @@
     border: 1px solid var(--gray-lighter);
     border-radius: 5px;
     box-sizing: border-box;
-    padding: 8px 0 8px 15px;
+    padding: 8px 15px 8px 15px;
     letter-spacing: 0.04rem;
+    font: var(--text-default);
     &::placeholder {
         color: var(--gray-lighter);
     }
@@ -17,6 +18,10 @@
     &_disabled {
         background-color: var(--gray-default);
         color: var(--gray-lighter);
+    }
+    &_non-valid {
+        background-color: #ffd6d2;
+        border-color: #ff6f61;
     }
 }
 

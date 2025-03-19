@@ -8,6 +8,7 @@
     display: inline;
     width: 100%;
     font: var(--text-button-default);
+    transition: background-color 0.2s ease;
     &_small-rounded {
         border-radius: 10px;
     }
@@ -30,7 +31,7 @@
         padding: 15px 40px;
     }
     &_disabled {
-        background-color: var(--gray-lighter);
+        background-color: var(--gray-default);
     }
     &_linked {
         display: inline-block;
