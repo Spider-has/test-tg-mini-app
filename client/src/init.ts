@@ -7,8 +7,7 @@ import {
     init as initSDK,
     $debug,
 } from '@telegram-apps/sdk-react';
-
-// import eruda from 'eruda';
+import eruda from 'eruda';
 
 export async function init(debug: boolean) {
     // Set @telegram-apps/sdk-react debug mode.
@@ -20,7 +19,7 @@ export async function init(debug: boolean) {
 
     // Add Eruda if needed.
     if (debug) {
-        // eruda.init();
+        eruda.init();
     }
 
     // Check if all required components are supported.

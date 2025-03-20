@@ -101,6 +101,7 @@ const UploadTaskImagesArea = () => {
                         ref={inputRef}
                         type="file"
                         accept="image/png, image/jpeg"
+                        tabIndex={-1}
                     />
                 </label>
             )}
@@ -276,6 +277,14 @@ export const RequestCreation = () => {
     useEffect(() => {
         setValidityCheck(false);
     }, [sliderState]);
+    useEffect(() => {
+        document.addEventListener('keydown', function (evt) {
+            if (evt.code === 'Tab') {
+                evt.preventDefault();
+            }
+        });
+    }, []);
+
     return (
         <div className={'request-creation'}>
             <PageMainAreaWrapper

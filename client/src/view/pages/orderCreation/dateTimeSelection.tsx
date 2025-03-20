@@ -71,7 +71,7 @@ export const DateSelection = (props: DateSelectionProps) => {
             <div className={'date-select__calendar-area'}>
                 <span>Выбери желательную дату выполнения задачи</span>
                 <div className={'date-select__calendar-wrapper'}>
-                    <div id="color-calendar"></div>
+                    <div tabIndex={-1} id="color-calendar"></div>
                 </div>
             </div>
             <SelectTimeIntervals

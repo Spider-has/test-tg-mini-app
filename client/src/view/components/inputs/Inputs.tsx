@@ -31,6 +31,7 @@ export const TextInput = (props: TextInputProps) => {
             maxLength={props.maxLength}
             placeholder={props.placeholder}
             value={props.value}
+            tabIndex={-1}
         />
     );
 };
@@ -54,6 +55,7 @@ export const TextAreaInput = (props: TextAreaProps) => {
             className={`input ${inputMultiClass} ${validClass}`}
             placeholder={props.placeholder}
             value={props.value}
+            tabIndex={-1}
         ></textarea>
     );
 };
@@ -87,8 +89,9 @@ export const OptionsList = memo(function OptionsList(props: CheckBoxListProps) {
 export const CheckboxInput = (props: CheckBoxOptionProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     return (
-        <label className="checkbox-input">
+        <label tabIndex={-1} className="checkbox-input">
             <input
+                tabIndex={-1}
                 onChange={() => {
                     props.onClickHandler(inputRef, props.text);
                 }}

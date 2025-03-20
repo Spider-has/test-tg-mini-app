@@ -26,6 +26,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
     const paddingClass = props.paddingType == 'big' ? 'button_big-padding ' : '';
     return (
         <button
+            tabIndex={-1}
             className={`button ${borderRadClass} ${textSizeClass} ${buttonBackColor} ${disabledClass} ${paddingClass}`}
             onClick={() => {
                 if (props.isDisabled === false || props.isDisabled === undefined) props.onClick();

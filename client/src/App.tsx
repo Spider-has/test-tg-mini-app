@@ -39,6 +39,7 @@ const Navigation = () => {
     const userRows = useMemo(() => {
         return initDataState?.user;
     }, [initDataState]);
+
     useEffect(() => {
         if (userRows) {
             const userData = tgUserStateToUserSlice(userRows);
@@ -46,7 +47,7 @@ const Navigation = () => {
         }
     }, [userRows]);
     useEffect(() => {
-        if (userId > 0) dispatch(fetchOrders(userId));
+        //    if (userId > 0) dispatch(fetchOrders(userId));
     }, [userId]);
     return (
         <BrowserRouter
