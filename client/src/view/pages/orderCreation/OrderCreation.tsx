@@ -185,6 +185,12 @@ type FinalStageProps = {
     checkValidity: boolean;
 };
 
+const options: Intl.DateTimeFormatOptions = {
+    month: 'long',
+    day: '2-digit',
+    year: 'numeric',
+};
+
 const FinalStage = (props: FinalStageProps) => {
     const orderData = useAppSelector(state => state.order);
     const dispatch = useAppDispatch();
@@ -202,7 +208,9 @@ const FinalStage = (props: FinalStageProps) => {
                     setTimeIntervals={(times: string[]) => {
                         dispatch(setOrderExecTimes(times));
                     }}
-                    subtitle="Желаемое время выполнения задачи"
+                    subtitle={`Желаемое время выполнения задачи на ${new Date(
+                        orderData.executionDate,
+                    ).toLocaleDateString('ru', options)}`}
                 />
             </div>
             <div className={'creation-final-stage__order-place'}>

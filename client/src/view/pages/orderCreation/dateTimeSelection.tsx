@@ -29,9 +29,7 @@ export const DateSelection = (props: DateSelectionProps) => {
     const dispatch = useAppDispatch();
     const calendar = useRef<Calendar>();
     const [errorDate, setErrorDate] = useState(false);
-    let dateLine = '';
     useEffect(() => {
-        let today_Date: HTMLDivElement | undefined = undefined;
         const today = new Date();
         calendar.current = new Calendar({
             id: '#color-calendar',
@@ -51,18 +49,9 @@ export const DateSelection = (props: DateSelectionProps) => {
             dropShadow: 'none',
             dateChanged: (currentDate: unknown) => {
                 const newDate = currentDate as Date;
-                console.log(newDate > today);
                 if (newDate > today) {
                     dispatch(setOrderDate(newDate.toISOString()));
-                    dateLine = newDate.toLocaleDateString('ru', options);
                 } else setErrorDate(true);
-                today_Date = document.querySelector('.calendar__day-today') as HTMLDivElement;
-                if (today_Date) {
-                    if (!today_Date.classList.contains('calendar__day-selected')) {
-                        const todayDayBox = today_Date.querySelector('.calendar__day-box') as HTMLDivElement;
-                        todayDayBox.style.opacity = '0.1';
-                    }
-                }
             },
         });
         calendar.current.setDate(new Date(orderDate));
@@ -74,6 +63,16 @@ export const DateSelection = (props: DateSelectionProps) => {
             setErrorDate(false);
         }
     }, [errorDate]);
+    useEffect(() => {
+        const selected = document.querySelectorAll('.calendar__day-selected') as NodeListOf<HTMLDivElement>;
+        const today_Date = document.querySelector('.calendar__day-today') as HTMLDivElement;
+        if (today_Date) {
+            if (!today_Date.classList.contains('calendar__day-selected') || selected.length > 1) {
+                const todayDayBox = today_Date.querySelector('.calendar__day-box') as HTMLDivElement;
+                todayDayBox.style.opacity = '0.1';
+            }
+        }
+    }, [orderDate]);
     return (
         <div className={'date-select'}>
             <div className={'date-select__calendar-area'}>
@@ -88,7 +87,9 @@ export const DateSelection = (props: DateSelectionProps) => {
                     dispatch(setOrderExecTimes(times));
                 }}
                 validityCheck={props.validityCheck}
-                subtitle={`Выбери желательное время выполнения задачи на ${dateLine}`}
+                subtitle={`Выбери желательное время выполнения задачи на ${new Date(
+                    orderDate,
+                ).toLocaleDateString('ru', options)}`}
             />
         </div>
     );
@@ -102,6 +103,7 @@ type TimeIntervalsSelectionProps = {
 };
 
 export const SelectTimeIntervals = (props: TimeIntervalsSelectionProps) => {
+    console.log(props.subtitle);
     const onCheckBoxHandler = useCallback(
         (inpRef: React.RefObject<HTMLInputElement>, inpText: string) => {
             const copyIntervals = [...props.intervals];

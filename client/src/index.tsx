@@ -5,7 +5,7 @@ import './index.scss';
 import { init } from './init.ts';
 import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
-const debug = true;
+const debug = false;
 import { tgInitData } from './telegramMock.ts';
 
 await tgInitData();
