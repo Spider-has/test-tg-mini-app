@@ -460,7 +460,7 @@ const Swiper = (props: SwiperProps) => {
     }, [props.currentStage]);
 
     useEffect(() => {
-        const minDistanse = 1000;
+        const minDistanse = 70;
         let touchStartPos = 0;
         let touchEndPos = 0;
         const onTouchStopHandler = (event: TouchEvent) => {
