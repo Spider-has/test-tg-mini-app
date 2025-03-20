@@ -25,6 +25,12 @@ export const TextInput = (props: TextInputProps) => {
             onInput={() => {
                 if (inpRef.current) props.onInputHandler(inpRef.current.value);
             }}
+            onKeyDown={event => {
+                console.log(event);
+                if (event.key === 'Enter') {
+                    if (inpRef.current) inpRef.current.blur();
+                }
+            }}
             className={`input ${validClass}`}
             type="text"
             ref={inpRef}
