@@ -31,6 +31,7 @@ export const DateSelection = (props: DateSelectionProps) => {
     const [errorDate, setErrorDate] = useState(false);
     let dateLine = '';
     useEffect(() => {
+        let today_Date: HTMLDivElement | undefined = undefined;
         const today = new Date();
         calendar.current = new Calendar({
             id: '#color-calendar',
@@ -55,6 +56,13 @@ export const DateSelection = (props: DateSelectionProps) => {
                     dispatch(setOrderDate(newDate.toISOString()));
                     dateLine = newDate.toLocaleDateString('ru', options);
                 } else setErrorDate(true);
+                today_Date = document.querySelector('.calendar__day-today') as HTMLDivElement;
+                if (today_Date) {
+                    if (!today_Date.classList.contains('calendar__day-selected')) {
+                        const todayDayBox = today_Date.querySelector('.calendar__day-box') as HTMLDivElement;
+                        todayDayBox.style.opacity = '0.1';
+                    }
+                }
             },
         });
         calendar.current.setDate(new Date(orderDate));
