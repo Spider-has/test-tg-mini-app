@@ -29,6 +29,7 @@ export const DateSelection = (props: DateSelectionProps) => {
     const dispatch = useAppDispatch();
     const calendar = useRef<Calendar>();
     const [errorDate, setErrorDate] = useState(false);
+    let dateLine = '';
     useEffect(() => {
         const today = new Date();
         calendar.current = new Calendar({
@@ -51,11 +52,12 @@ export const DateSelection = (props: DateSelectionProps) => {
                 const newDate = currentDate as Date;
                 console.log(newDate > today);
                 if (newDate > today) {
-                    dispatch(setOrderDate(newDate));
+                    dispatch(setOrderDate(newDate.toISOString()));
+                    dateLine = newDate.toLocaleDateString('ru', options);
                 } else setErrorDate(true);
             },
         });
-        calendar.current.setDate(orderDate);
+        calendar.current.setDate(new Date(orderDate));
     }, []);
     useEffect(() => {
         console.log(1);
@@ -78,10 +80,7 @@ export const DateSelection = (props: DateSelectionProps) => {
                     dispatch(setOrderExecTimes(times));
                 }}
                 validityCheck={props.validityCheck}
-                subtitle={`Выбери желательное время выполнения задачи на ${orderDate.toLocaleDateString(
-                    'ru',
-                    options,
-                )}`}
+                subtitle={`Выбери желательное время выполнения задачи на ${dateLine}`}
             />
         </div>
     );

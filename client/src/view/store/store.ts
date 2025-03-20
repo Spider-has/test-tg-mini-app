@@ -2,14 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import orderReducer from './orderCreationSlice/orderCreation';
 import userReducer from './userSlice/user';
 import ordersListReducer from './orderListSlice/orderList';
-
+import logger from 'redux-logger';
+import feedbackReducer from './feedbackSlice/feedback';
 const store = configureStore({
     reducer: {
         order: orderReducer,
         user: userReducer,
         ordersList: ordersListReducer,
+        feedback: feedbackReducer,
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware(),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });
 
 export default store;

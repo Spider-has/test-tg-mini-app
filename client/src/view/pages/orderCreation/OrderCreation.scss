@@ -1,6 +1,6 @@
 .request-creation {
     height: 100vh;
-    min-height: 400px;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -33,6 +33,7 @@
             font: var(--text-title);
             width: 100%;
             text-align: center;
+            letter-spacing: 0.04rem;
         }
     }
     &__top-panel-wrapper {
@@ -301,4 +302,7 @@
             font: var(--text-default);
         }
     }
+}
+.calendar__day-today .calendar__day-box {
+    background-color: #06d6a0;
 }

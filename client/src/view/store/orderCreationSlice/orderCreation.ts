@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 type SelectedImage = {
     isSelectedNow: boolean;
     src: string;
@@ -12,7 +11,7 @@ export type OrderCreationFormData = {
     street: string;
     entrance: string;
     apartmentNumber: string;
-    executionDate: Date;
+    executionDate: string;
     executionTimes: string[];
     selectedImage: SelectedImage;
 };
@@ -21,7 +20,7 @@ const initialState: OrderCreationFormData = {
     images: [],
     title: '',
     description: '',
-    executionDate: new Date(),
+    executionDate: new Date().toISOString(),
     executionTimes: [
         '8:00 - 10:00',
         '10:00 - 12:00',
@@ -64,7 +63,7 @@ const orderCreationSlice = createSlice({
         setOrderEntrance: (state, action: PayloadAction<string>) => {
             state.entrance = action.payload;
         },
-        setOrderDate: (state, action: PayloadAction<Date>) => {
+        setOrderDate: (state, action: PayloadAction<string>) => {
             state.executionDate = action.payload;
         },
         setOrderExecTimes: (state, action: PayloadAction<string[]>) => {
@@ -76,6 +75,7 @@ const orderCreationSlice = createSlice({
         setImageSelected: (state, action: PayloadAction<boolean>) => {
             state.selectedImage.isSelectedNow = action.payload;
         },
+        clearAllData: () => initialState,
     },
 });
 
@@ -91,6 +91,7 @@ export const {
     setOrderExecTimes,
     setImageSelected,
     setSelectedImageSrc,
+    clearAllData,
 } = orderCreationSlice.actions;
 
 export default orderCreationSlice.reducer;

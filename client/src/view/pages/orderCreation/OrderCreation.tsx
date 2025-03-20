@@ -14,6 +14,7 @@ import { DateSelection, SelectTimeIntervals } from './dateTimeSelection';
 import { TopPanel } from '../../components/topPanel/TopPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
+    clearAllData,
     deleteOrderImage,
     OrderCreationFormData,
     setImageSelected,
@@ -25,6 +26,8 @@ import {
 } from '../../store/orderCreationSlice/orderCreation';
 import { ImagePopup, TextFieldPopup } from '../../components/popup/Popup';
 import { ErrorMessage } from '../../components/errorMessage/ErrorMessage';
+import { ORDER_LIST_URL, WELCOME_PAGE_URL } from '../../../App';
+import { fetchOrders } from '../../store/orderListSlice/orderList';
 
 const UploadTaskImagesArea = () => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -118,13 +121,13 @@ const TaskMainData = (props: TaskMainDataProps) => {
         if (props.checkValidity && title === '') return false;
         return true;
     }, [props.checkValidity, title]);
-    const descriptionInputValid = useMemo(() => {
-        if (props.checkValidity && description === '') return false;
-        return true;
-    }, [props.checkValidity, description]);
+    // const descriptionInputValid = useMemo(() => {
+    //     if (props.checkValidity && description === '') return false;
+    //     return true;
+    // }, [props.checkValidity, description]);
     const shownMessage = useMemo(() => {
-        return !titleInputValid || !descriptionInputValid;
-    }, [titleInputValid, descriptionInputValid]);
+        return !titleInputValid;
+    }, [titleInputValid]);
     return (
         <div className={'request-task'}>
             <div className={'request-task__task-image-area'}>
@@ -134,10 +137,8 @@ const TaskMainData = (props: TaskMainDataProps) => {
             <div className={'request-task__task-header-area'}>
                 <span>Опиши суть задачи несколькими словами</span>
                 <TextInput
-                    onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
-                        if (inpRef.current) {
-                            dispatch(setOrderTitle(inpRef.current.value));
-                        }
+                    onInputHandler={(value: string) => {
+                        dispatch(setOrderTitle(value));
                     }}
                     placeholder={'Суть задачи'}
                     maxLength={40}
@@ -148,14 +149,11 @@ const TaskMainData = (props: TaskMainDataProps) => {
             <div className={'request-task__task-description-area'}>
                 <span>Опиши свою задачу подробнее</span>
                 <TextAreaInput
-                    onInputHandler={(inpRef: React.RefObject<HTMLTextAreaElement>) => {
-                        if (inpRef.current) {
-                            dispatch(setOrderDescription(inpRef.current.value));
-                        }
+                    onInputHandler={(value: string) => {
+                        dispatch(setOrderDescription(value));
                     }}
                     placeholder="Подробное описание задачи"
                     value={description}
-                    isNotValid={!descriptionInputValid}
                 />
             </div>
             <div className={'request-task__error-wrapper'}>
@@ -171,11 +169,14 @@ const timeIntervalToDate = (intervals: string[]): TimeDurations[] => {
     copyIntervals.forEach(interval => {
         const times = interval.split('-');
         const start = new Date();
-        start.setHours(Number(times[0].split(':')[0]));
+        start.setUTCHours(Number(times[0].split(':')[0]));
+        start.setMinutes(0, 0, 0);
         const end = new Date();
-        end.setHours(Number(times[1].split(':')[0]));
-        dates.push({ start: start, end: end });
+        end.setUTCHours(Number(times[1].split(':')[0]));
+        end.setMinutes(0, 0, 0);
+        dates.push({ start: start.toISOString(), end: end.toISOString() });
     });
+    console.log(dates);
     return dates;
 };
 
@@ -212,8 +213,8 @@ const FinalStage = (props: FinalStageProps) => {
 };
 
 type TimeDurations = {
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
 };
 
 const sendAllDataHandler = (userId: number, client_userName: string, OrderData: OrderCreationFormData) => {
@@ -233,7 +234,7 @@ const sendAllDataHandler = (userId: number, client_userName: string, OrderData: 
             times,
         ),
     );
-    fetchNewOrder(
+    return fetchNewOrder(
         toOrderData(
             user_id,
             client_username,
@@ -244,9 +245,7 @@ const sendAllDataHandler = (userId: number, client_userName: string, OrderData: 
             OrderData.executionDate,
             times,
         ),
-    ).then(res => {
-        console.log(res?.status);
-    });
+    );
 };
 
 export const RequestCreation = () => {
@@ -260,17 +259,14 @@ export const RequestCreation = () => {
     const nextButtonDisabled = () => {
         switch (sliderState) {
             case 0:
-                return orderData.title === '' || orderData.description === '';
+                return orderData.title === '';
             case 1:
                 return orderData.executionTimes.length === 0;
             case 2:
                 return orderData.street == '';
             case 3:
                 return (
-                    orderData.title === '' ||
-                    orderData.description === '' ||
-                    orderData.executionTimes.length === 0 ||
-                    orderData.street === ''
+                    orderData.title === '' || orderData.executionTimes.length === 0 || orderData.street === ''
                 );
             default:
                 return false;
@@ -347,7 +343,11 @@ export const RequestCreation = () => {
                             />
                             <Button
                                 onClick={() => {
-                                    sendAllDataHandler(userData.chatId, userData.userName, orderData);
+                                    sendAllDataHandler(userData.chatId, userData.userName, orderData).then(
+                                        res => {
+                                            if (res?.status === 201) dispatch(fetchOrders(userData.chatId));
+                                        },
+                                    );
                                     setSuccessPopupOpen(true);
                                 }}
                                 onDisabledClick={() => {
@@ -380,7 +380,8 @@ export const RequestCreation = () => {
                     />
                     <Button
                         onClick={() => {
-                            navigate('/start');
+                            dispatch(clearAllData());
+                            navigate(WELCOME_PAGE_URL);
                         }}
                         text={'Перейти'}
                         bgColor={'red'}
@@ -398,7 +399,8 @@ export const RequestCreation = () => {
                 <NavigationButtonsArea>
                     <Button
                         onClick={() => {
-                            navigate('/ordersList');
+                            navigate(ORDER_LIST_URL);
+                            dispatch(clearAllData());
                         }}
                         text={'В главное меню'}
                         bgColor={'green'}
@@ -458,7 +460,7 @@ const Swiper = (props: SwiperProps) => {
     }, [props.currentStage]);
 
     useEffect(() => {
-        const minDistanse = 20;
+        const minDistanse = 60;
         let touchStartPos = 0;
         let touchEndPos = 0;
         const onTouchStopHandler = (event: TouchEvent) => {
@@ -550,7 +552,7 @@ type OrderData = {
     title: string;
     description: string;
     address: string;
-    execution_date: Date;
+    execution_date: string;
     execution_times: TimeDurations[];
 };
 
@@ -561,7 +563,7 @@ const toOrderData = (
     title: string,
     description: string,
     address: string,
-    execution_date: Date,
+    execution_date: string,
     execution_times: TimeDurations[],
 ): OrderData => {
     const imagesWithoutB64: string[] = [];

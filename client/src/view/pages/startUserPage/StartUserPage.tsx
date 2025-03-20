@@ -3,8 +3,17 @@ import './StartUserPage.scss';
 import logo from '../../static/images/logo.png';
 import { Avatar } from '../../components/avatar/Avatar';
 import { TopPanel } from '../../components/topPanel/TopPanel';
+import { useAppSelector } from '../../hooks/hooks';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ORDER_LIST_URL } from '../../../App';
 
 export const StartUserPage = () => {
+    const userOrdersData = useAppSelector(state => state.ordersList.orders);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (userOrdersData.length > 0) navigate(ORDER_LIST_URL);
+    }, [userOrdersData]);
     return (
         <div className={'requests-list'}>
             <div className="requests-list__main-area-container">

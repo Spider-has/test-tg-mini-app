@@ -75,3 +75,29 @@
         color: #4188ff;
     }
 }
+
+.radio-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    &__radio-icon {
+        width: 12px;
+        height: 12px;
+        border: 1px solid var(--black-default);
+        border-radius: 20px;
+        transition: all 0.2s ease;
+        &_selected {
+            background-color: var(--green-default);
+            opacity: 1;
+        }
+    }
+}
+
+.radio-inputs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    &_non-valid .radio-input__radio-icon {
+        border-color: var(--red-default);
+    }
+}

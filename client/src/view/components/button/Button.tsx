@@ -8,6 +8,7 @@ type ButtonProps = {
     borderRound?: 'small' | 'normal';
     textSize?: 'small' | 'normal';
     bgColor: 'yellow' | 'green' | 'red' | 'gray' | 'white';
+    paddingType?: 'big' | 'normal';
     isDisabled?: boolean;
 };
 
@@ -22,9 +23,10 @@ export const Button = (props: ButtonProps): JSX.Element => {
     const textSizeClass = props.borderRound == 'small' ? 'button_small-text' : '';
     const buttonBackColor = `button_${props.bgColor}`;
     const disabledClass = props.isDisabled ? 'button_disabled' : '';
+    const paddingClass = props.paddingType == 'big' ? 'button_big-padding ' : '';
     return (
         <button
-            className={`button ${borderRadClass} ${textSizeClass} ${buttonBackColor} ${disabledClass}`}
+            className={`button ${borderRadClass} ${textSizeClass} ${buttonBackColor} ${disabledClass} ${paddingClass}`}
             onClick={() => {
                 if (props.isDisabled === false || props.isDisabled === undefined) props.onClick();
                 else if (props.onDisabledClick) props.onDisabledClick();

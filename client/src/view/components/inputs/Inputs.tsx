@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './Inputs.scss';
 
 type InputProps = {
@@ -9,12 +9,12 @@ type InputProps = {
 
 type TextInputProps = InputProps & {
     maxLength: number;
-    onInputHandler: (inputRef: React.RefObject<HTMLInputElement>) => void;
+    onInputHandler: (value: string) => void;
 };
 
 type TextAreaProps = InputProps & {
     rowsCount?: number;
-    onInputHandler: (inputRef: React.RefObject<HTMLTextAreaElement>) => void;
+    onInputHandler: (value: string) => void;
 };
 
 export const TextInput = (props: TextInputProps) => {
@@ -23,7 +23,7 @@ export const TextInput = (props: TextInputProps) => {
     return (
         <input
             onInput={() => {
-                props.onInputHandler(inpRef);
+                if (inpRef.current) props.onInputHandler(inpRef.current.value);
             }}
             className={`input ${validClass}`}
             type="text"
@@ -48,7 +48,7 @@ export const TextAreaInput = (props: TextAreaProps) => {
         <textarea
             ref={textArea}
             onInput={() => {
-                props.onInputHandler(textArea);
+                if (textArea.current) props.onInputHandler(textArea.current.value);
             }}
             rows={props.rowsCount ? props.rowsCount : 0}
             className={`input ${inputMultiClass} ${validClass}`}
@@ -142,4 +142,63 @@ export const DropDownListInput = memo(function DropDownListInput(props: DropDown
             </div>
         </div>
     );
+});
+
+export type RadioOption = {
+    text: string;
+};
+
+type RadioOptionProps = RadioOption & {
+    isSelected: boolean;
+    onOptionClick: (i: number) => void;
+    index: number;
+};
+
+const Option = memo(function Option(props: RadioOptionProps) {
+    const selectedClass = useMemo(
+        () => (props.isSelected ? 'radio-input__radio-icon_selected' : ''),
+        [props.isSelected],
+    );
+    return (
+        <div className={'radio-input'} onClick={() => props.onOptionClick(props.index)}>
+            <div className={`radio-input__radio-icon ${selectedClass}`}></div>
+            <span>{props.text}</span>
+        </div>
+    );
+});
+
+type RadioInputListProps = {
+    Options: RadioOption[];
+    isValid?: boolean;
+    onSelectedChange?: (i: number) => void;
+};
+
+export const RadioInputList = memo(function RadioInputList(props: RadioInputListProps) {
+    const [selectedI, setSelectedI] = useState(-1);
+    const onSelectionChange = useCallback((i: number) => {
+        setSelectedI(i);
+    }, []);
+    const options = useMemo(
+        () =>
+            props.Options.map((el, i) => {
+                return (
+                    <Option
+                        onOptionClick={onSelectionChange}
+                        key={i}
+                        index={i}
+                        text={el.text}
+                        isSelected={selectedI === i}
+                    />
+                );
+            }),
+        [selectedI],
+    );
+    useEffect(() => {
+        if (props.onSelectedChange && selectedI >= 0) props.onSelectedChange(selectedI);
+    }, [selectedI]);
+    const validClass = useMemo(() => {
+        if (props.isValid === false) return 'radio-inputs-list_non-valid';
+        else return '';
+    }, [props.isValid]);
+    return <div className={`radio-inputs-list ${validClass}`}>{options}</div>;
 });

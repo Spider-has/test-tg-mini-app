@@ -1,0 +1,28 @@
+.feedback-form {
+    height: 100vh;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    &__inputs-area {
+        display: flex;
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+    &__single-input-area {
+        font: var(--text-default);
+        letter-spacing: 0.04rem;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        & textArea {
+            min-height: 80px;
+        }
+    }
+    &__radio-options {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

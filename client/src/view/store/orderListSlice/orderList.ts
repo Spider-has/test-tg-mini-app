@@ -31,16 +31,25 @@ const initialState: ordersListState = {
     error: undefined,
 };
 
-const GET_ORDERS_URL = '/api/v1/task/{tg_chat_id}?page=1&limit=10';
+const GET_ORDERS_URL = 'http://217.114.14.144:80/api/v1/task/all/{tg_chat_id}?page=1&limit=10';
+
+type FetchData = {
+    orders: Order[];
+};
 
 export const fetchOrders = createAsyncThunk('orderList/fetchOrders', async (chatId: number) => {
-    const response = await fetch(GET_ORDERS_URL.replace('{tg_chat_id}', chatId.toString()), {
-        method: 'GET',
-    });
-    console.log(response);
-    const data = await response.json();
-    console.log(data);
-    return data;
+    try {
+        const response = await fetch(GET_ORDERS_URL.replace('{tg_chat_id}', chatId.toString()), {
+            method: 'GET',
+        });
+        console.log(response);
+        if (!response.ok) throw new Error(`request get error ${response.status}`);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 const ordersListSlice = createSlice({
@@ -56,9 +65,9 @@ const ordersListSlice = createSlice({
             .addCase(fetchOrders.pending, state => {
                 state.status = 'loading';
             })
-            .addCase(fetchOrders.fulfilled, (state, action: PayloadAction<Order[]>) => {
+            .addCase(fetchOrders.fulfilled, (state, action: PayloadAction<FetchData>) => {
                 state.status = 'succeeded';
-                state.orders = action.payload;
+                state.orders = action.payload.orders;
             })
             .addCase(fetchOrders.rejected, (state, action) => {
                 state.status = 'failed';

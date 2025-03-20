@@ -148,10 +148,8 @@ export const PlaceInputs = (props: PlaceInputsProps) => {
                     placeholder={'Введите адрес'}
                     value={orderStreet}
                     rowsCount={2}
-                    onInputHandler={(inpRef: React.RefObject<HTMLTextAreaElement>) => {
-                        if (inpRef.current) {
-                            dispatch(setOrderStreet(inpRef.current.value));
-                        }
+                    onInputHandler={(value: string) => {
+                        dispatch(setOrderStreet(value));
                     }}
                     isNotValid={errMessageShown}
                 />
@@ -163,10 +161,8 @@ export const PlaceInputs = (props: PlaceInputsProps) => {
                         placeholder={'Подъезд'}
                         maxLength={10}
                         value={orderEntrance}
-                        onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
-                            if (inpRef.current) {
-                                dispatch(setOrderEntrance(inpRef.current.value));
-                            }
+                        onInputHandler={(value: string) => {
+                            dispatch(setOrderEntrance(value));
                         }}
                     />
                 </div>
@@ -176,10 +172,8 @@ export const PlaceInputs = (props: PlaceInputsProps) => {
                         placeholder={'Квартира'}
                         maxLength={10}
                         value={orderApartment}
-                        onInputHandler={(inpRef: React.RefObject<HTMLInputElement>) => {
-                            if (inpRef.current) {
-                                dispatch(setOrderApartmentNumber(inpRef.current.value));
-                            }
+                        onInputHandler={(value: string) => {
+                            dispatch(setOrderApartmentNumber(value));
                         }}
                     />
                 </div>
